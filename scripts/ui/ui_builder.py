@@ -30,29 +30,20 @@ class UiBuilder:
         return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", show_label=True)
 
     def __build(self, workflow_selector: gr.Dropdown):
-        use_minimal_area = gr.Checkbox(
-            label="Use minimal area (for close faces)", value=Option.DEFAULT_USE_MINIMAL_AREA
-        )
+        use_minimal_area = gr.Checkbox(label="Use minimal area (for close faces)", value=Option.DEFAULT_USE_MINIMAL_AREA)
         self.infotext_fields.append((use_minimal_area, Option.add_prefix("use_minimal_area")))
 
-        save_original_image = gr.Checkbox(label="Save original image", value=Option.DEFAULT_SAVE_ORIGINAL_IMAGE)
-        self.infotext_fields.append((save_original_image, Option.add_prefix("save_original_image")))
-
         with gr.Row():
+            save_original_image = gr.Checkbox(label="Save original image", value=Option.DEFAULT_SAVE_ORIGINAL_IMAGE)
+            self.infotext_fields.append((save_original_image, Option.add_prefix("save_original_image")))
+
             show_original_image = gr.Checkbox(label="Show original image", value=Option.DEFAULT_SHOW_ORIGINAL_IMAGE)
             self.infotext_fields.append((show_original_image, Option.add_prefix("show_original_image")))
 
-            show_intermediate_steps = gr.Checkbox(
-                label="Show intermediate steps", value=Option.DEFAULT_SHOW_INTERMEDIATE_STEPS
-            )
+            show_intermediate_steps = gr.Checkbox(label="Show intermediate steps", value=Option.DEFAULT_SHOW_INTERMEDIATE_STEPS)
             self.infotext_fields.append((show_intermediate_steps, Option.add_prefix("show_intermediate_steps")))
 
-        prompt_for_face = gr.Textbox(
-            show_label=False,
-            placeholder="Prompt for face",
-            label="Prompt for face",
-            lines=2,
-        )
+        prompt_for_face = gr.Textbox(show_label=False,placeholder="Prompt for face",label="Prompt for face",lines=2,)
         self.infotext_fields.append((prompt_for_face, Option.add_prefix("prompt_for_face")))
 
         affected_areas = gr.CheckboxGroup(
