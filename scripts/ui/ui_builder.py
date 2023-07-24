@@ -30,10 +30,10 @@ class UiBuilder:
         return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", show_label=True)
 
     def __build(self, workflow_selector: gr.Dropdown):
-        use_minimal_area = gr.Checkbox(label="Use minimal area (for close faces)", value=Option.DEFAULT_USE_MINIMAL_AREA)
-        self.infotext_fields.append((use_minimal_area, Option.add_prefix("use_minimal_area")))
-
         with gr.Row():
+            use_minimal_area = gr.Checkbox(label="Use minimal area", value=Option.DEFAULT_USE_MINIMAL_AREA)
+            self.infotext_fields.append((use_minimal_area, Option.add_prefix("use_minimal_area")))
+        
             save_original_image = gr.Checkbox(label="Save original image", value=Option.DEFAULT_SAVE_ORIGINAL_IMAGE)
             self.infotext_fields.append((save_original_image, Option.add_prefix("save_original_image")))
 
@@ -49,32 +49,26 @@ class UiBuilder:
         affected_areas = gr.CheckboxGroup(
             label="Affected areas", choices=["Face", "Hair", "Hat", "Neck"], value=Option.DEFAULT_AFFECTED_AREAS
         )
+
         affected_areas_key = Option.add_prefix("affected_areas")
         self.infotext_fields.append((affected_areas, affected_areas_key))
         ParamValueParser.add(affected_areas_key, list)
 
-        mask_size = gr.Slider(label="Mask size", minimum=0, maximum=64, step=1, value=Option.DEFAULT_MASK_SIZE)
-        self.infotext_fields.append((mask_size, Option.add_prefix("mask_size")))
+        with gr.Row():
+            mask_size = gr.Slider(label="Mask size", minimum=0, maximum=64, step=1, value=Option.DEFAULT_MASK_SIZE)
+            self.infotext_fields.append((mask_size, Option.add_prefix("mask_size")))
 
-        mask_blur = gr.Slider(label="Mask blur ", minimum=0, maximum=64, step=1, value=Option.DEFAULT_MASK_BLUR)
-        self.infotext_fields.append((mask_blur, Option.add_prefix("mask_blur")))
+            mask_blur = gr.Slider(label="Mask blur ", minimum=0, maximum=64, step=1, value=Option.DEFAULT_MASK_BLUR)
+            self.infotext_fields.append((mask_blur, Option.add_prefix("mask_blur")))
 
         with gr.Accordion("Advanced Options", open=False):
             with gr.Accordion("(1) Face Detection", open=False):
-                max_face_count = gr.Slider(
-                    minimum=1,
-                    maximum=20,
-                    step=1,
-                    value=Option.DEFAULT_MAX_FACE_COUNT,
+                max_face_count = gr.Slider(minimum=1, maximum=20, step=1, value=Option.DEFAULT_MAX_FACE_COUNT,
                     label="Maximum number of faces to detect",
                 )
                 self.infotext_fields.append((max_face_count, Option.add_prefix("max_face_count")))
 
-                confidence = gr.Slider(
-                    minimum=0.7,
-                    maximum=1.0,
-                    step=0.01,
-                    value=Option.DEFAULT_CONFIDENCE,
+                confidence = gr.Slider(minimum=0.7, maximum=1.0, step=0.01, value=Option.DEFAULT_CONFIDENCE,
                     label="Face detection confidence",
                 )
                 self.infotext_fields.append((confidence, Option.add_prefix("confidence")))
@@ -85,17 +79,13 @@ class UiBuilder:
                 )
                 self.infotext_fields.append((face_margin, Option.add_prefix("face_margin")))
 
-                face_size = gr.Slider(
-                    label="Size of the face when recreating",
-                    minimum=64,
-                    maximum=2048,
-                    step=16,
-                    value=Option.DEFAULT_FACE_SIZE,
+                face_size = gr.Slider(label="Size of the face when recreating",
+                    minimum=64, maximum=2048, step=16, value=Option.DEFAULT_FACE_SIZE,
                 )
                 self.infotext_fields.append((face_size, Option.add_prefix("face_size")))
 
-                ignore_larger_faces = gr.Checkbox(
-                    label="Ignore faces larger than specified size", value=Option.DEFAULT_IGNORE_LARGER_FACES
+                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size", 
+                    value=Option.DEFAULT_IGNORE_LARGER_FACES
                 )
                 self.infotext_fields.append((ignore_larger_faces, Option.add_prefix("ignore_larger_faces")))
 
