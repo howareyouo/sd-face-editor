@@ -27,7 +27,7 @@ class UiBuilder:
             return self.__build(self.__create_workflow_selector())
 
     def __create_workflow_selector(self) -> gr.Dropdown:
-        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", show_label=True)
+        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", show_label=False)
 
     def __build(self, workflow_selector: gr.Dropdown):
         with gr.Row():
