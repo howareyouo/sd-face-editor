@@ -65,20 +65,20 @@ class UiBuilder:
         with gr.Accordion("Advanced Options", open=False):
             gr.HTML("(1) Face Detection:")
             with gr.Row():
-                max_face_count = gr.Slider(minimum=1, maximum=20, step=1, value=Option.DEFAULT_MAX_FACE_COUNT,
-                    label="Maximum number of faces to detect",
+                max_face_count = gr.Slider(label="Maximum number of faces to detect",
+                    minimum=1, maximum=10, step=1, value=Option.DEFAULT_MAX_FACE_COUNT
                 )
                 self.infotext_fields.append((max_face_count, Option.add_prefix("max_face_count")))
 
-                confidence = gr.Slider(minimum=0.7, maximum=1.0, step=0.01, value=Option.DEFAULT_CONFIDENCE,
-                    label="Face detection confidence",
+                confidence = gr.Slider(label="Face detection confidence",
+                    minimum=0.7, maximum=1.0, step=0.01, value=Option.DEFAULT_CONFIDENCE,
                 )
                 self.infotext_fields.append((confidence, Option.add_prefix("confidence")))
 
             gr.HTML("(2) Crop and Resize the Faces:")
             with gr.Row():
-                face_margin = gr.Slider(
-                    minimum=1.0, maximum=2.0, step=0.1, value=Option.DEFAULT_FACE_MARGIN, label="Face margin"
+                face_margin = gr.Slider(label="Face margin",
+                    minimum=1.0, maximum=2.0, step=0.1, value=Option.DEFAULT_FACE_MARGIN
                 )
                 self.infotext_fields.append((face_margin, Option.add_prefix("face_margin")))
 
@@ -148,7 +148,7 @@ class UiBuilder:
             self.infotext_fields.append((workflow, Option.add_prefix("workflow")))
 
         return [
-            workflow_selector,
+            enabled,
             face_margin,
             confidence,
             strength1,
@@ -168,7 +168,7 @@ class UiBuilder:
             show_original_image,
             workflow,
             upscaler,
-            tilt_adjustment_threshold,
+            tilt_adjustment_threshold
         ]
 
 
