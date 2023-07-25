@@ -101,20 +101,20 @@ class UiBuilder:
 
             with gr.Accordion("(3) Recreate the Faces", open=False):
                 strength1 = gr.Slider(
+                    label="Denoising strength for face images",
+                    value=Option.DEFAULT_STRENGTH1,
                     minimum=0.1,
                     maximum=0.8,
                     step=0.05,
-                    value=Option.DEFAULT_STRENGTH1,
-                    label="Denoising strength for face images",
                 )
                 self.infotext_fields.append((strength1, Option.add_prefix("strength1")))
 
                 tilt_adjustment_threshold = gr.Slider(
                     label="Tilt adjustment threshold",
+                    value=Option.DEFAULT_TILT_ADJUSTMENT_THRESHOLD,
                     minimum=0,
                     maximum=180,
                     step=10,
-                    value=Option.DEFAULT_TILT_ADJUSTMENT_THRESHOLD,
                 )
                 self.infotext_fields.append((tilt_adjustment_threshold, Option.add_prefix("tilt_adjustment_threshold")))
 
@@ -131,11 +131,11 @@ class UiBuilder:
 
             with gr.Accordion("(5) Blend the entire image", open=False):
                 strength2 = gr.Slider(
+                    label="Denoising strength for the entire image ",
+                    value=Option.DEFAULT_STRENGTH2,
                     minimum=0.0,
                     maximum=1.0,
                     step=0.05,
-                    value=Option.DEFAULT_STRENGTH2,
-                    label="Denoising strength for the entire image ",
                 )
                 self.infotext_fields.append((strength2, Option.add_prefix("strength2")))
 

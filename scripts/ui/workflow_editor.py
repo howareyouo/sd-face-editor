@@ -4,6 +4,7 @@ from typing import Any, Dict, List
 
 import gradio as gr
 from modules import shared
+from modules.ui_components import FormRow, FormGroup, ToolButton, FormHTML
 from pydantic import ValidationError
 
 from scripts.io.util import workflows_dir
@@ -80,40 +81,35 @@ def validate_workflow(workflow: str) -> str:
 
 
 def build(workflow_selector: gr.Dropdown):
-    with gr.Blocks(title="Workflow"):
-        with gr.Row():
+    with gr.Row():
+        with FormRow(variant="compact"):
             filename_dropdown = gr.Dropdown(
-                choices=get_files(),
-                label="Choose a Workflow",
-                value="default",
-                scale=2,
-                min_width=400,
-                show_label=False,
+                choices=get_files(), label="Choose a Workflow", value="default", scale=2, show_label=False
             )
             refresh_button = gr.Button(value="🔄", scale=0, size="sm", elem_classes="tool")
-        with gr.Row():
+        with FormRow(variant="compact"):
             filename_input = gr.Textbox(scale=2, show_label=False, placeholder="Save as")
             save_button = gr.Button(value="💾", scale=0, size="sm", elem_classes="tool")
 
-        workflow_editor = gr.Code(language="json", label="Workflow", value=load_workflow("default"))
-        with gr.Row():
-            json_status = gr.Textbox(scale=2, show_label=False)
-            validate_button = gr.Button(value="✅", scale=0, size="sm", elem_classes="tool")
+    workflow_editor = gr.Code(language="json", label="Workflow", value=load_workflow("default"))
+    with gr.Row():
+        json_status = gr.Textbox(scale=2, show_label=False)
+        validate_button = gr.Button(value="✅", scale=0, size="sm", elem_classes="tool")
 
-        filename_dropdown.input(load_workflow, inputs=[filename_dropdown], outputs=[workflow_editor])
-        filename_dropdown.change(get_filename, inputs=[filename_dropdown], outputs=[filename_input])
-        filename_dropdown.input(sync_selection, inputs=[filename_dropdown], outputs=[workflow_selector])
+    filename_dropdown.input(load_workflow, inputs=[filename_dropdown], outputs=[workflow_editor])
+    filename_dropdown.change(get_filename, inputs=[filename_dropdown], outputs=[filename_input])
+    filename_dropdown.input(sync_selection, inputs=[filename_dropdown], outputs=[workflow_selector])
 
-        workflow_selector.input(load_workflow, inputs=[workflow_selector], outputs=[workflow_editor])
-        workflow_selector.input(get_filename, inputs=[workflow_selector], outputs=[filename_input])
-        workflow_selector.input(sync_selection, inputs=[workflow_selector], outputs=[filename_dropdown])
+    workflow_selector.input(load_workflow, inputs=[workflow_selector], outputs=[workflow_editor])
+    workflow_selector.input(get_filename, inputs=[workflow_selector], outputs=[filename_input])
+    workflow_selector.input(sync_selection, inputs=[workflow_selector], outputs=[filename_dropdown])
 
-        save_button.click(validate_workflow, inputs=[workflow_editor], outputs=[json_status])
-        save_button.click(save_workflow, inputs=[filename_input, workflow_editor])
+    save_button.click(validate_workflow, inputs=[workflow_editor], outputs=[json_status])
+    save_button.click(save_workflow, inputs=[filename_input, workflow_editor])
 
-        refresh_button.click(refresh_files, inputs=[workflow_editor, filename_dropdown], outputs=[filename_dropdown])
-        refresh_button.click(refresh_files, inputs=[workflow_editor, filename_dropdown], outputs=[workflow_selector])
+    refresh_button.click(refresh_files, inputs=[workflow_editor, filename_dropdown], outputs=[filename_dropdown])
+    refresh_button.click(refresh_files, inputs=[workflow_editor, filename_dropdown], outputs=[workflow_selector])
 
-        validate_button.click(validate_workflow, inputs=[workflow_editor], outputs=[json_status])
+    validate_button.click(validate_workflow, inputs=[workflow_editor], outputs=[json_status])
 
-        return workflow_editor
+    return workflow_editor
