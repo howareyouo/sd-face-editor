@@ -17,19 +17,18 @@ class UiBuilder:
     def build(self, is_img2img: bool):
         if self.__for_extension:
             with gr.Accordion("Face Editor", open=False, elem_id="sd-face-editor-extension"):
-                with gr.Row():
-                    enabled = gr.Checkbox(label="Enabled", value=False)
-                    workflow_selector = self.__create_workflow_selector()
-                components = [enabled] + self.__build(workflow_selector)
-                self.infotext_fields.append((enabled, Option.add_prefix("enabled")))
-                return components
+                return self.__build()
         else:
-            return self.__build(self.__create_workflow_selector())
+            self.__create_workflow_selector()
+            return self.__build()
 
     def __create_workflow_selector(self) -> gr.Dropdown:
-        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", show_label=False)
+        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", elem_classes="flex-0")
 
-    def __build(self, workflow_selector: gr.Dropdown):
+    def __build(self):
+        enabled = gr.Checkbox(label="Enabled", value=False)
+        self.infotext_fields.append((enabled, Option.add_prefix("enabled")))
+
         with gr.Row():
             use_minimal_area = gr.Checkbox(label="Use minimal area", value=Option.DEFAULT_USE_MINIMAL_AREA)
             self.infotext_fields.append((use_minimal_area, Option.add_prefix("use_minimal_area")))
@@ -43,8 +42,10 @@ class UiBuilder:
             show_intermediate_steps = gr.Checkbox(label="Show intermediate steps", value=Option.DEFAULT_SHOW_INTERMEDIATE_STEPS)
             self.infotext_fields.append((show_intermediate_steps, Option.add_prefix("show_intermediate_steps")))
 
-        prompt_for_face = gr.Textbox(show_label=False,placeholder="Prompt for face",label="Prompt for face",lines=2,)
-        self.infotext_fields.append((prompt_for_face, Option.add_prefix("prompt_for_face")))
+        with gr.Row():
+            prompt_for_face = gr.Textbox(show_label=False,placeholder="Prompt for face",label="Prompt for face",lines=2)
+            self.infotext_fields.append((prompt_for_face, Option.add_prefix("prompt_for_face")))
+            workflow_selector = self.__create_workflow_selector()
 
         affected_areas = gr.CheckboxGroup(
             label="Affected areas", choices=["Face", "Hair", "Hat", "Neck"], value=Option.DEFAULT_AFFECTED_AREAS
@@ -62,7 +63,8 @@ class UiBuilder:
             self.infotext_fields.append((mask_blur, Option.add_prefix("mask_blur")))
 
         with gr.Accordion("Advanced Options", open=False):
-            with gr.Accordion("(1) Face Detection", open=False):
+            gr.HTML("(1) Face Detection:")
+            with gr.Row():
                 max_face_count = gr.Slider(minimum=1, maximum=20, step=1, value=Option.DEFAULT_MAX_FACE_COUNT,
                     label="Maximum number of faces to detect",
                 )
@@ -73,33 +75,36 @@ class UiBuilder:
                 )
                 self.infotext_fields.append((confidence, Option.add_prefix("confidence")))
 
-            with gr.Accordion("(2) Crop and Resize the Faces", open=False):
+            gr.HTML("(2) Crop and Resize the Faces:")
+            with gr.Row():
                 face_margin = gr.Slider(
                     minimum=1.0, maximum=2.0, step=0.1, value=Option.DEFAULT_FACE_MARGIN, label="Face margin"
                 )
                 self.infotext_fields.append((face_margin, Option.add_prefix("face_margin")))
 
-                face_size = gr.Slider(label="Size of the face when recreating",
-                    minimum=64, maximum=2048, step=16, value=Option.DEFAULT_FACE_SIZE,
-                )
-                self.infotext_fields.append((face_size, Option.add_prefix("face_size")))
-
-                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size", 
-                    value=Option.DEFAULT_IGNORE_LARGER_FACES
-                )
-                self.infotext_fields.append((ignore_larger_faces, Option.add_prefix("ignore_larger_faces")))
-
                 upscalers = [upscaler.name for upscaler in shared.sd_upscalers]
-                if Option.DEFAULT_UPSCALER not in upscalers:
+                if Option.DEFAULT_UPSCALER not in upscalers: 
                     upscalers.append(Option.DEFAULT_UPSCALER)
                 upscaler = gr.Dropdown(
                     label="Upscaler",
+                    show_label=False,
                     choices=[upscaler.name for upscaler in shared.sd_upscalers],
                     value=Option.DEFAULT_UPSCALER,
                 )
                 self.infotext_fields.append((upscaler, Option.add_prefix("upscaler")))
 
-            with gr.Accordion("(3) Recreate the Faces", open=False):
+            with gr.Row():
+                face_size = gr.Slider(label="Size of the face when recreating",
+                    minimum=64, maximum=2048, step=16, value=Option.DEFAULT_FACE_SIZE,
+                )
+                self.infotext_fields.append((face_size, Option.add_prefix("face_size")))
+                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size", 
+                    value=Option.DEFAULT_IGNORE_LARGER_FACES
+                )
+                self.infotext_fields.append((ignore_larger_faces, Option.add_prefix("ignore_larger_faces")))
+
+            gr.HTML("(3) Recreate the Faces")
+            with gr.Row():
                 strength1 = gr.Slider(
                     label="Denoising strength for face images",
                     value=Option.DEFAULT_STRENGTH1,
@@ -118,18 +123,12 @@ class UiBuilder:
                 )
                 self.infotext_fields.append((tilt_adjustment_threshold, Option.add_prefix("tilt_adjustment_threshold")))
 
-                apply_scripts_to_faces = gr.Checkbox(
-                    label="Apply scripts to faces", visible=False, value=Option.DEFAULT_APPLY_SCRIPTS_TO_FACES
-                )
-                self.infotext_fields.append((apply_scripts_to_faces, Option.add_prefix("apply_scripts_to_faces")))
+            apply_scripts_to_faces = gr.Checkbox(
+                label="Apply scripts to faces", visible=False, value=Option.DEFAULT_APPLY_SCRIPTS_TO_FACES
+            )
+            self.infotext_fields.append((apply_scripts_to_faces, Option.add_prefix("apply_scripts_to_faces")))
 
-            with gr.Accordion("(4) Paste the Faces", open=False):
-                apply_inside_mask_only = gr.Checkbox(
-                    label="Apply inside mask only ", value=Option.DEFAULT_APPLY_INSIDE_MASK_ONLY
-                )
-                self.infotext_fields.append((apply_inside_mask_only, Option.add_prefix("apply_inside_mask_only")))
-
-            with gr.Accordion("(5) Blend the entire image", open=False):
+            with gr.Row():
                 strength2 = gr.Slider(
                     label="Denoising strength for the entire image ",
                     value=Option.DEFAULT_STRENGTH2,
@@ -139,11 +138,17 @@ class UiBuilder:
                 )
                 self.infotext_fields.append((strength2, Option.add_prefix("strength2")))
 
+                apply_inside_mask_only = gr.Checkbox(
+                    label="Apply inside mask only ", value=Option.DEFAULT_APPLY_INSIDE_MASK_ONLY
+                )
+                self.infotext_fields.append((apply_inside_mask_only, Option.add_prefix("apply_inside_mask_only")))
+
         with gr.Accordion("Workflow Editor", open=False):
             workflow = workflow_editor.build(workflow_selector)
             self.infotext_fields.append((workflow, Option.add_prefix("workflow")))
 
         return [
+            workflow_selector,
             face_margin,
             confidence,
             strength1,
