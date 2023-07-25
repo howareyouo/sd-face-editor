@@ -116,7 +116,7 @@ class ImageProcessor:
         if option.show_intermediate_steps:
             output_images.append(self.__show_detected_faces(np.copy(entire_image), faces, p))
 
-        print(f"number of faces: {len(faces)}.  ")
+        print(f"[Face Editor] Number of faces: {len(faces)}.  ")
         if (
             len(faces) == 0
             and pre_proc_image is not None

@@ -101,7 +101,7 @@ class Face:
                 angle = angle = (angle + 180) % 360
             return angle
         except Exception:
-            print(traceback.format_exc())
+            print("[Face Editor] ", traceback.format_exc())
             return 0
 
     def rotate_face_area_on_image(self, angle: float):

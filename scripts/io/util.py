@@ -34,7 +34,7 @@ def load_classes_from_file(file_path: str, base_class: Type) -> List[Type]:
             if issubclass(cls, base_class) and cls is not base_class:
                 classes.append(cls)
     except Exception as e:
-        print(file_path, ":", e)
+        print("[Face Editor] ", file_path, ":", e)
 
     return classes
 
@@ -66,7 +66,7 @@ def load_classes_from_directory_(base_class: Type, dir: str, installer: bool) ->
                 if classes:
                     all_classes.extend(classes)
             except Exception as e:
-                print(f"Face Editor: Can't load {file_path}")
-                print(str(e))
+                print(f"[Face Editor] Can't load {file_path}")
+                print("[Face Editor] ", str(e))
 
     return all_classes

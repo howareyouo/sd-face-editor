@@ -18,5 +18,5 @@ if shared.opts.data.get("face_editor_additional_components", None) is not None:
         try:
             cls().install()
         except Exception as e:
-            print(traceback.format_exc())
-            print(f"Face Editor: {e}")
+            print("[Face Editor] ", traceback.format_exc())
+            print(f"[Face Editor]: {e}")

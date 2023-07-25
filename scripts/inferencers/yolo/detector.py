@@ -40,6 +40,6 @@ class YoloDetector(FaceDetector, YoloInferencer):
                         int(box.xyxy[0][3]),
                     )
                     faces.append(Rect(l, t, r, b, tag))
-                    print(f"{tag} detected at ({l}, {t}, {r}, {b}), Confidence: {box_conf:.2f}")
+                    print(f"[Face Editor] {tag} detected at ({l}, {t}, {r}, {b}), Confidence: {box_conf:.2f}")
 
         return faces

@@ -45,7 +45,7 @@ class YoloMaskGenerator(MaskGenerator, YoloInferencer):
                 if box_tag != tag or box_conf < conf:
                     continue
                 if detection.masks is None:
-                    print(f"This model may not support masks: {self.loaded_path}")
+                    print(f"[Face Editor] This model may not support masks: {self.loaded_path}")
                     continue
                 mask = cv2.resize(detection.masks[i].data[0].cpu().numpy(), (512, 512))
                 combined_mask += (mask * 255).astype(np.uint8)

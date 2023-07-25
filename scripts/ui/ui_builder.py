@@ -23,7 +23,8 @@ class UiBuilder:
             return self.__build()
 
     def __create_workflow_selector(self) -> gr.Dropdown:
-        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default", elem_classes="flex-0")
+        return gr.Dropdown(choices=workflow_editor.get_files(), label="Workflow", value="default",
+                           elem_classes="flex-0")
 
     def __build(self):
         enabled = gr.Checkbox(label="Enabled", value=False)
@@ -32,18 +33,19 @@ class UiBuilder:
         with gr.Row():
             use_minimal_area = gr.Checkbox(label="Use minimal area", value=Option.DEFAULT_USE_MINIMAL_AREA)
             self.infotext_fields.append((use_minimal_area, Option.add_prefix("use_minimal_area")))
-        
+
             save_original_image = gr.Checkbox(label="Save original image", value=Option.DEFAULT_SAVE_ORIGINAL_IMAGE)
             self.infotext_fields.append((save_original_image, Option.add_prefix("save_original_image")))
 
             show_original_image = gr.Checkbox(label="Show original image", value=Option.DEFAULT_SHOW_ORIGINAL_IMAGE)
             self.infotext_fields.append((show_original_image, Option.add_prefix("show_original_image")))
 
-            show_intermediate_steps = gr.Checkbox(label="Show intermediate steps", value=Option.DEFAULT_SHOW_INTERMEDIATE_STEPS)
+            show_intermediate_steps = gr.Checkbox(label="Show intermediate steps",
+                                                  value=Option.DEFAULT_SHOW_INTERMEDIATE_STEPS)
             self.infotext_fields.append((show_intermediate_steps, Option.add_prefix("show_intermediate_steps")))
 
         with gr.Row():
-            prompt_for_face = gr.Textbox(show_label=False,placeholder="Prompt for face",label="Prompt for face",lines=2)
+            prompt_for_face = gr.Textbox(placeholder="Prompt for face", lines=2, elem_classes="prompt", show_label=False)
             self.infotext_fields.append((prompt_for_face, Option.add_prefix("prompt_for_face")))
             workflow_selector = self.__create_workflow_selector()
 
@@ -65,25 +67,27 @@ class UiBuilder:
         with gr.Accordion("Advanced Options", open=False):
             gr.HTML("(1) Face Detection:")
             with gr.Row():
-                max_face_count = gr.Slider(label="Maximum number of faces to detect",
+                max_face_count = gr.Slider(
+                    label="Maximum number of faces to detect",
                     minimum=1, maximum=10, step=1, value=Option.DEFAULT_MAX_FACE_COUNT
                 )
                 self.infotext_fields.append((max_face_count, Option.add_prefix("max_face_count")))
 
-                confidence = gr.Slider(label="Face detection confidence",
+                confidence = gr.Slider(
+                    label="Face detection confidence",
                     minimum=0.7, maximum=1.0, step=0.01, value=Option.DEFAULT_CONFIDENCE,
                 )
                 self.infotext_fields.append((confidence, Option.add_prefix("confidence")))
 
             gr.HTML("(2) Crop and Resize the Faces:")
             with gr.Row():
-                face_margin = gr.Slider(label="Face margin",
-                    minimum=1.0, maximum=2.0, step=0.1, value=Option.DEFAULT_FACE_MARGIN
+                face_margin = gr.Slider(
+                    label="Face margin", minimum=1.0, maximum=2.0, step=0.1, value=Option.DEFAULT_FACE_MARGIN
                 )
                 self.infotext_fields.append((face_margin, Option.add_prefix("face_margin")))
 
                 upscalers = [upscaler.name for upscaler in shared.sd_upscalers]
-                if Option.DEFAULT_UPSCALER not in upscalers: 
+                if Option.DEFAULT_UPSCALER not in upscalers:
                     upscalers.append(Option.DEFAULT_UPSCALER)
                 upscaler = gr.Dropdown(
                     label="Upscaler",
@@ -94,13 +98,14 @@ class UiBuilder:
                 self.infotext_fields.append((upscaler, Option.add_prefix("upscaler")))
 
             with gr.Row():
-                face_size = gr.Slider(label="Size of the face when recreating",
+                face_size = gr.Slider(
+                    label="Size of the face when recreating",
                     minimum=64, maximum=2048, step=16, value=Option.DEFAULT_FACE_SIZE,
                 )
                 self.infotext_fields.append((face_size, Option.add_prefix("face_size")))
-                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size", 
-                    value=Option.DEFAULT_IGNORE_LARGER_FACES
-                )
+                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size",
+                                                  value=Option.DEFAULT_IGNORE_LARGER_FACES
+                                                  )
                 self.infotext_fields.append((ignore_larger_faces, Option.add_prefix("ignore_larger_faces")))
 
             gr.HTML("(3) Recreate the Faces")
