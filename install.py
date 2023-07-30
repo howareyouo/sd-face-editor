@@ -9,6 +9,7 @@ except Exception:
 
 import traceback
 
+import launch
 from modules import shared
 
 from scripts.use_cases.installer import Installer
@@ -18,5 +19,10 @@ if shared.opts.data.get("face_editor_additional_components", None) is not None:
         try:
             cls().install()
         except Exception as e:
-            print("[Face Editor] ", traceback.format_exc())
-            print(f"[Face Editor]: {e}")
+            print(traceback.format_exc())
+            print(f"Face Editor: {e}")
+
+launch.run_pip(
+    "install lark-parser",
+    "requirements for Face Editor",
+)
