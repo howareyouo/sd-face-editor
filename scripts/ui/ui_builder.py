@@ -100,12 +100,13 @@ class UiBuilder:
             with gr.Row():
                 face_size = gr.Slider(
                     label="Size of the face when recreating",
-                    minimum=64, maximum=2048, step=16, value=Option.DEFAULT_FACE_SIZE,
+                    minimum=64, maximum=1024, step=8, value=Option.DEFAULT_FACE_SIZE,
                 )
                 self.infotext_fields.append((face_size, Option.add_prefix("face_size")))
-                ignore_larger_faces = gr.Checkbox(label="Ignore faces larger than specified size",
-                                                  value=Option.DEFAULT_IGNORE_LARGER_FACES
-                                                  )
+                ignore_larger_faces = gr.Checkbox(
+                    label="Ignore faces larger than specified size",
+                    value=Option.DEFAULT_IGNORE_LARGER_FACES
+                )
                 self.infotext_fields.append((ignore_larger_faces, Option.add_prefix("ignore_larger_faces")))
 
             gr.HTML("(3) Recreate the Faces")

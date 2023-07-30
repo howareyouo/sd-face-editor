@@ -116,19 +116,21 @@ class ImageProcessor:
         if option.show_intermediate_steps:
             output_images.append(self.__show_detected_faces(np.copy(entire_image), faces, p))
 
-        print(f"[Face Editor] Number of faces: {len(faces)}.  ")
+        face_num = len(faces)
+        if face_num > 0:
+            print(f"[Face Editor] Faces: {len(faces)}")
+
         if (
-            len(faces) == 0
+            face_num == 0
             and pre_proc_image is not None
             and (
                 option.save_original_image
                 or not shared.opts.data.get("face_editor_save_original_on_detection_fail", False)
             )
-        ):
-            return Processed(
-                p, images_list=[pre_proc_image], all_prompts=[p.prompt], all_seeds=[p.seed], infotexts=[""]
-            )
-
+        ): return Processed(
+            p, images_list=[pre_proc_image], all_prompts=[p.prompt], all_seeds=[p.seed], infotexts=[""]
+        )
+                
         wildcards_script = self.__get_wildcards_script(p)
         face_prompts = self.__get_face_prompts(len(faces), option.prompt_for_face, entire_prompt)
 
